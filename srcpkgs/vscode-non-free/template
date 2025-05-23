@@ -21,16 +21,6 @@ homepage="https://code.visualstudio.com/"
 distfiles="https://update.code.visualstudio.com/${version}/linux-x64/stable>vscode.tar.gz"
 checksum=@b3fcfc84881d28aedb76f568c260ce38f20ded731d56155a21b4da2eca47c9c8
 
-# do_fetch() {
-#     local dest="$XBPS_SRCDISTDIR/vscode.tar.gz"
-#     if [ ! -f "$dest" ]; then
-#         curl -L \
-#             -o "$dest" \
-#             "https://update.code.visualstudio.com/${version}/linux-x64/stable"
-#     fi
-# }
-
-
 #original by chat
 do_install() {
     # Install full VSCode dir to /usr/share/code
