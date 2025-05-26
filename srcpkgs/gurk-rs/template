@@ -1,0 +1,14 @@
+# Template file for 'gurk-rs'
+pkgname=gurk-rs
+version=0.7.1
+revision=1
+build_style=cargo
+hostmakedepends="pkg-config rust cargo cmake clang protobuf "
+makedepends="openssl-devel sqlite-devel sqlcipher-devel libpng-devel dbus-devel libgcc-devel libglibutil-devel"
+depends=""
+short_desc="Signal Messenger client for terminal"
+maintainer="fishslips <glassbox93@gmail.com>"
+license="AGPL-3.0"
+homepage="https://github.com/boxdot/gurk-rs"
+distfiles="https://github.com/boxdot/gurk-rs/archive/refs/tags/v${version}.tar.gz"
+checksum=@e38cda5149e54ac0852aae9db9b1daadbe945cbd08001f6b41b3720bdb4c9e31
