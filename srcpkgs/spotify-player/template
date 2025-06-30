@@ -6,12 +6,19 @@ build_style=cargo
 make_install_args="--path spotify_player"
 hostmakedepends="pkg-config cmake clang rust-bindgen"
 makedepends="openssl-devel alsa-lib-devel dbus-devel libxcb-devel"
-short_desc="Command driven spotify player"
-maintainer="Rodrigo Oliveira <mdkcore@qtrnn.io>"
+short_desc="A Spotify player in the terminal"
+maintainer="R/odrigo Oliveira <mdkcore@qtrnn.io>, Tim Severance <>"
 license="MIT"
 homepage="https://github.com/aome510/spotify-player"
 distfiles="https://github.com/aome510/spotify-player/archive/refs/tags/v${version}.tar.gz"
 checksum=87c3529a5b711a9c79bb0bac21fb65d280eec943f836920e0c02e8d9d17c75dd
+
+do_install() {
+	cargo install --locked \
+		--features "image,notify,media-control" \
+		--root ${DESTDIR}/usr \
+		--path spotify_player
+}
 
 post_install() {
 	vlicense LICENSE
