@@ -1,0 +1,25 @@
+# Template file for 'dotnet-core' meta package
+pkgname=dotnet-core
+version=9.0.6
+revision=1
+archs="x86_64"
+wrksrc=dotnet
+build_style=gnu-configure
+hostmakedepends="dotnet-sdk-bin bash clang cmake git icu-libs mit-krb5-libs libgit2 libunwind libxml2 lldb llvm lttng-ust nodejs openssl-devel zlib-devel"
+makedepends=""
+depends=""
+short_desc="Meta package for source-built .NET"
+maintainer="VoidAlone <glassbox93@gmail.com>"
+license="MIT"
+homepage="https://dotnet.microsoft.com"
+distfiles="https://github.com/dotnet/dotnnet/archive/refs/tags/v${version}.tar.gz"
+checksum=badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb
+
+
+pre_build(){
+
+}
+
+do_build(){
+
+}
