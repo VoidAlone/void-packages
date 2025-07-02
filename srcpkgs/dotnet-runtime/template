@@ -1,0 +1,23 @@
+# Template file for 'dotnet-runtime-bin'
+pkgname=dotnet-runtime
+version=8.0.17
+revision=1
+archs="x86_64" # adjust as needed
+wrksrc="${pkgname}-${version}"
+hostmakedepends="unzip"
+depends="glibc libgcc icu-libs mit-krb5-libs libunwind openssl zlib"
+short_desc="Microsoft .NET Runtime (binary)"
+maintainer="VoidAlone <glassbox93@gmail.com>"
+license="MIT"
+homepage="https://dotnet.microsoft.com"
+distfiles="https://builds.dotnet.microsoft.com/dotnet/Runtime/${version}/dotnet-runtime-${version}-linux-x64.tar.gz"
+checksum=@9dbc5226724c39afcb6fc72fd5448109efd3a2d143903eca7be6d3118701a3f6
+
+do_install() {
+	vmkdir /usr/lib/dotnet
+	cp -a . ${DESTDIR}/usr/lib/dotnet
+
+	vmkdir /usr/bin
+	ln -sf /usr/lib/dotnet/dotnet ${DESTDIR}/usr/bin/dotnet
+}
+
