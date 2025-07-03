@@ -17,7 +17,12 @@ checksum=badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb
 
 
 pre_build(){
+	# Ensure the build directory exists
+	mkdir -p "${wrksrc}"
+	cd "${wrksrc}" || return 1
 
+	# Clone the dotnet source code
+	git clone --depth 1 --branch v${version}
 }
 
 do_build(){

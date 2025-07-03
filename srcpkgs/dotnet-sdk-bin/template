@@ -1,0 +1,25 @@
+# Template file for 'dotnet-sdk-bin'
+pkgname=dotnet-sdk
+version=8.0.411
+revision=1
+archs="x86_64"
+hostmakedepends="unzip"
+depends="glibc libgcc icu-libs mit-krb5-libs libunwind openssl zlib"
+short_desc="Microsoft .NET SDK binary for building dotnet-core meta package"
+maintainer="VoidAlone <glassbox93@gmail.com>"
+license="MIT"
+homepage="https://dotnet.microsoft.com"
+distfiles="https://builds.dotnet.microsoft.com/dotnet/Sdk/${version}/dotnet-sdk-${version}-linux-x64.tar.gz"
+checksum=@990929912f2b101d3668f367630ac07a2845f242ea61c06f9971d959f13f2ca2
+tags="nonfree"
+bootstrap="yes"
+repository="bootstrap"
+provides="dotnet-sdk-bin"
+do_install() {
+	vmkdir /usr/lib/dotnet
+	cp -a . ${DESTDIR}/usr/lib/dotnet
+
+	vmkdir /usr/bin
+	ln -sf /usr/lib/dotnet/dotnet ${DESTDIR}/usr/bin/dotnet
+}
+
