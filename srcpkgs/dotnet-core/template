@@ -3,28 +3,67 @@ pkgname=dotnet-core
 version=9.0.6
 revision=1
 archs="x86_64"
-wrksrc=dotnet
-build_style=gnu-configure
 hostmakedepends="dotnet-sdk-bin bash clang cmake git icu-libs mit-krb5-libs libgit2 libunwind libxml2 lldb llvm lttng-ust nodejs openssl-devel zlib-devel"
-makedepends=""
-depends=""
 short_desc="Meta package for source-built .NET"
 maintainer="VoidAlone <glassbox93@gmail.com>"
 license="MIT"
 homepage="https://dotnet.microsoft.com"
-distfiles="https://github.com/dotnet/dotnnet/archive/refs/tags/v${version}.tar.gz"
-checksum=badbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadb
+distfiles="https://github.com/dotnet/dotnet/archive/refs/tags/v${version}.tar.gz"
+checksum=@c2a0a6b0c685765f4da39d16f47df07252a3dd4d5ade494ce349c3a3051acfad
 
+do_build() {
+  export BOOTSTRAP_DOTNET="$XBPS_CROSS_BASE/usr/lib/dotnet"
+  export PATH="$BOOTSTRAP_DOTNET:$PATH"
+  export DOTNET_ROOT="$BOOTSTRAP_DOTNET"
 
-pre_build(){
-	# Ensure the build directory exists
-	mkdir -p "${wrksrc}"
-	cd "${wrksrc}" || return 1
-
-	# Clone the dotnet source code
-	git clone --depth 1 --branch v${version}
+  ./build.sh \
+    --source-build \
+    --configuration Release \
+    --with-sdk "$BOOTSTRAP_DOTNET" \
+    --with-system-libs zlib+icu+libunwind+libxml2+openssl \
+    --verbosity minimal
 }
 
-do_build(){
+do_install() {
+  local sdk_tarball
+  sdk_tarball="$(find artifacts/assets/Release/ -name 'dotnet-sdk-*.tar.gz' | head -n1)"
+  mkdir -p "${DESTDIR}/usr/lib/dotnet"
+  bsdtar -xf "$sdk_tarball" -C "${DESTDIR}/usr/lib/dotnet" --no-same-owner
 
+  mkdir -p "${DESTDIR}/usr/bin"
+  ln -sf /usr/lib/dotnet/dotnet "${DESTDIR}/usr/bin/dotnet"
 }
+
+
+dotnet-sdk_package() {
+  short_desc="Dotnet SDK"
+  pkg_install() {
+    vmove usr/lib/dotnet/sdk
+    #vinstall dotnet/src/sdk/scripts/register-completions.bash 644 usr/share/bash-completion/completions dotnet
+    #vinstall dotnet/src/sdk/scripts/register-completions.zsh  644 usr/share/zsh/site-functions _dotnet
+  }
+}
+
+dotnet-host_package() {
+  short_desc="Dotnet host binary and entrypoint"
+  pkg_install() {
+    vmove usr/lib/dotnet/dotnet
+    vmove usr/bin/dotnet
+    ln -sf /usr/lib/dotnet/dotnet ${PKGDESTDIR}/usr/bin/dotnet
+  }
+}
+
+dotnet-runtime_package() {
+  short_desc="Dotnet runtime libraries"
+  pkg_install() {
+    vmove usr/lib/dotnet/shared
+  }
+}
+
+dotnet-targeting-pack_package() {
+  short_desc="Dotnet targeting packs for building apps"
+  pkg_install() {
+    vmove usr/lib/dotnet/packs
+  }
+}
+
